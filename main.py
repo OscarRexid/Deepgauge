@@ -54,9 +54,10 @@ def find_cordinates(image,boxes,class_id, class_names,confidence_threshold=0.5)
     return None, None
 
 #Find angle between vectors
+ 
 def vector_angle(vector_1,vector_2)
-    return np.arccos((np.dot(vector_1,vector_2))/(abs(vector_1)*abs(vector_2)))
-    
+    return np.arccos((np.dot(vector_1,vector_2))/(np.linalg.norm(vector_1)*np.linalg.norm(vector_2)))
+
 def find_all_parts(image,model)
     detections = model.predict(image)
     
@@ -76,6 +77,8 @@ def find_all_parts(image,model)
         center_to_dial = (dial_cordinates(0) - center_cordinates(0), dial_cordinates(1) - center_cordinates(1))
         center_to_min = (min_cordinates(0) - center_cordinates(0), min_cordinates(1) - center_cordinates(1))
         center_to_max = (max_cordinates(0) - center_cordinates(0), max_cordinates(1) - center_cordinates(1))
+        radius = np.linalg.norm(center_to_min)
+        dial_angle = vector_angle(center_to_min,center_to_dial)
         
     # Display the image with all the detected boxes
     cv2.imshow('Detected Objects', cv2.cvtColor(image_with_boxes, cv2.COLOR_RGB2BGR))
